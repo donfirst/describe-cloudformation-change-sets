@@ -19,6 +19,7 @@ if [ "$change_set_name" != "null" ]; then
   numOfResources=$(aws cloudformation list-stack-resources --stack-name "$INPUT_STACK_NAME" --output json | jq .StackResourceSummaries | jq length)
   status=$(aws cloudformation describe-stacks --stack-name "$INPUT_STACK_NAME" --output json | jq .Stacks[0].StackStatus | tr -d '"')
   if [ "$status" == "REVIEW_IN_PROGRESS" ] && [ "$numOfResources" == "0" ]; then
+    has_changes="false"
     aws cloudformation delete-stack --stack-name "$INPUT_STACK_NAME"
   fi
 fi
